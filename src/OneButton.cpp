@@ -35,7 +35,7 @@ OneButton::OneButton(int pin, int inactivePinState)
     pinMode(pin, INPUT);
   }
 
-  // no functions attached yet
+  // no callback functions attached yet
   onClick = NULL;
   onDoubleClick = NULL;
   onLongPressStart = NULL;
@@ -43,7 +43,6 @@ OneButton::OneButton(int pin, int inactivePinState)
   onDuringLongPress = NULL;
 } // OneButton
 
-// function to get the current long pressed state
 inline bool OneButton::isLongPressed(){
   return _state == LongPressing;
 }
@@ -51,17 +50,17 @@ inline bool OneButton::isLongPressed(){
 void OneButton::tick(void)
 {
   int buttonPressed = digitalRead(_pin) ^ _inactivePinState; // current button state
-  unsigned long now = millis(); // current (relative) time in msecs
+  unsigned long now = millis(); // current time in msecs
 
   // Implementation of the state machine
   switch(_state) {
-    case NotPressed: // waiting for menu pin being pressed.
+    case NotPressed: // waiting for button to be pressed
       if (buttonPressed) {
-        _state = Pressing; // step to state Pressing
-        _startTime = now; // remember starting time
+        _state = Pressing;
+        _startTime = now;
       }
       break;
-    case Pressing: // waiting for menu pin being released.
+    case Pressing: // waiting for button to be released
       if (!buttonPressed) {
         if((unsigned long)(now - _startTime) < debounceMs) {
           // button was released too quickly so I assume some debouncing.
@@ -69,12 +68,12 @@ void OneButton::tick(void)
           _state = NotPressed;
         }
         else {
-          _state = SingleClicked; // step to state SingleClicked
-          _stopTime = now; // remember stopping time
+          _state = SingleClicked;
+          _stopTime = now;
         }
       }
       else if (buttonPressed && ((unsigned long)(now - _startTime) > pressMs)) {
-        _state = LongPressing; // step to state LongPressing
+        _state = LongPressing;
         if (onLongPressStart) onLongPressStart();
         if (onDuringLongPress) onDuringLongPress();
       }
@@ -82,30 +81,32 @@ void OneButton::tick(void)
     case SingleClicked: // waiting for second press or timeout
       if (onDoubleClick && (unsigned long)(now - _startTime) < clickMs) {
         if (buttonPressed && ((unsigned long)(now - _stopTime) > debounceMs)) {
-          _state = ClickAndPressing; // step to state ClickAndPressing
-          _startTime = now; // remember starting time
+          _state = ClickAndPressing;
+          _startTime = now;
         } else {
           // this was only a single short click
           if (onClick) onClick();
-          _state = NotPressed; // restart
+          _state = NotPressed;
         }
       }
       break;
-    case ClickAndPressing: // waiting for menu pin being released finally.
+    case ClickAndPressing: // waiting for button to be released (for double click)
       // Stay here for at least debounceMs because else we might end up in state 1 if the
       // button bounces for too long.
       if (!buttonPressed && ((unsigned long)(now - _startTime) > debounceMs)) {
         // this was a 2 click sequence.
         if (onDoubleClick) onDoubleClick();
-        _state = NotPressed; // restart.
+        _state = NotPressed;
       }
       break;
-    case LongPressing: // waiting for menu pin being release after long press.
+    case LongPressing: // waiting for button to be released after long press
       if (!buttonPressed) {
-        _state = NotPressed; // restart.
+        _state = NotPressed;
         if (onLongPressStop) onLongPressStop();
         else if (onClick && onLongPressStart == NULL && onDuringLongPress == NULL) {
-          //There was no onLongPress event registered, so treat it as a single click
+          //There were no onLongPress events registered, so treat it as a single click
+		  //Note: We do not catch this earlier in the state machine, in case user is interested in
+		  //checking isLongPressed() even though they are not using onLongPress callbacks.
           onClick();
         }
       } else {
@@ -115,7 +116,3 @@ void OneButton::tick(void)
       break;
   }
 } // OneButton.tick()
-
-
-// end.
-

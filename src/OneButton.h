@@ -32,7 +32,7 @@ public:
   int clickMs;    // maximum number of milliseconds between double-clicks (and delay before single click confirmed)
   int pressMs;    // minimum number of milliseconds to count as a long button press
   
-  // These variables will hold functions acting as event source.
+  // Assignable callback functions for each kind of button event
   callbackFunction onClick;
   callbackFunction onDoubleClick;
   callbackFunction onLongPressStart;
@@ -45,8 +45,7 @@ public:
   OneButton(int pin, int inactivePinState);
   
   // ----- State machine functions -----
-
-  // call this function every some milliseconds for handling button events.
+  // call tick() function every some milliseconds for handling button events.
   void tick(void);
   inline bool isLongPressed();
 
@@ -54,20 +53,18 @@ private:
   int _pin;              // hardware pin number. 
   int _inactivePinState; // whether pin is HIGH or LOW when button is not pressed
 
-  // These variables that hold information across the upcoming tick calls.
-  // They are initialized once on program start and are updated every time the tick function is called.
-  
+  // Button state machine states
   enum ButtonState {
-    NotPressed = 0,
-    Pressing = 1,
-    SingleClicked = 2,
-    ClickAndPressing = 3,
-    LongPressing = 6
+    NotPressed,
+    Pressing,
+    SingleClicked,
+    ClickAndPressing,
+    LongPressing
   };
-  
+  // These variables hold data for button state machine
   ButtonState _state;
-  unsigned long _startTime; // will be set in state 1
-  unsigned long _stopTime; // will be set in state 2
+  unsigned long _startTime;
+  unsigned long _stopTime;
 };
 
 #endif
