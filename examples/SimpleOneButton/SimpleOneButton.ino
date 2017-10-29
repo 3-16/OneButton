@@ -28,7 +28,7 @@ void setup() {
   pinMode(13, OUTPUT);      // sets the digital pin as output
   
   // link the doubleclick function to be called on a doubleclick event.   
-  button.attachDoubleClick(doubleclick);
+  button.onDoubleClick = doubleclick;
 } // setup
   
 

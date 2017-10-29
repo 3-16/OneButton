@@ -53,18 +53,18 @@ void setup() {
   Serial.println("Starting TwoButtons...");
 
   // link the button 1 functions.
-  button1.attachClick(click1);
-  button1.attachDoubleClick(doubleclick1);
-  button1.attachLongPressStart(longPressStart1);
-  button1.attachLongPressStop(longPressStop1);
-  button1.attachDuringLongPress(longPress1);
+  button1.onClick = click1;
+  button1.onDoubleClick = doubleclick1;
+  button1.onLongPressStart = longPressStart1;
+  button1.onLongPressStop = longPressStop1;
+  button1.onDuringLongPress = longPress1;
 
   // link the button 2 functions.
-  button2.attachClick(click2);
-  button2.attachDoubleClick(doubleclick2);
-  button2.attachLongPressStart(longPressStart2);
-  button2.attachLongPressStop(longPressStop2);
-  button2.attachDuringLongPress(longPress2);
+  button2.onClick = click2;
+  button2.onDoubleClick = doubleclick2;
+  button2.onLongPressStart = longPressStart2;
+  button2.onLongPressStop = longPressStop2;
+  button2.onDuringLongPress = longPress2;
 
 } // setup
 

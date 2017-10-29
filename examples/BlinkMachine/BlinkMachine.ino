@@ -70,13 +70,13 @@ void setup() {
   pinMode(13, OUTPUT);      // sets the digital pin as output
 
   // link the myClickFunction function to be called on a click event.   
-  button.attachClick(myClickFunction);
+  button.onClick = myClickFunction;
 
   // link the doubleclick function to be called on a doubleclick event.   
-  button.attachDoubleClick(myDoubleClickFunction);
+  button.onDoubleClick = myDoubleClickFunction;
 
   // set 80 msec. debouncing time. Default is 50 msec.
-  button.setDebounceTicks(80);
+  button.debounceTicks = 80;
 } // setup
 
 

@@ -28,28 +28,20 @@ extern "C" {
 class OneButton
 {
 public:
+  int debounceTicks; // number of ticks for debounce times.
+  int clickTicks; // number of ticks that have to pass by before a click is detected
+  int pressTicks; // number of ticks that have to pass by before a long button press is detected
+  
+  // These variables will hold functions acting as event source.
+  callbackFunction onClick;
+  callbackFunction onDoubleClick;
+  callbackFunction onLongPressStart;
+  callbackFunction onLongPressStop;
+  callbackFunction onDuringLongPress;
+  
   // ----- Constructor -----
   OneButton(int pin, int active);
   
-  // ----- Set runtime parameters -----
-
-  // set # millisec after safe click is assumed.
-  void setDebounceTicks(int ticks);
-
-  // set # millisec after single click is assumed.
-  void setClickTicks(int ticks);
-
-  // set # millisec after press is assumed.
-  void setPressTicks(int ticks);
-
-  // attach functions that will be called when button was pressed in the specified way.
-  void attachClick(callbackFunction newFunction);
-  void attachDoubleClick(callbackFunction newFunction);
-  void attachPress(callbackFunction newFunction); // DEPRECATED, replaced by longPressStart, longPressStop and duringLongPress
-  void attachLongPressStart(callbackFunction newFunction);
-  void attachLongPressStop(callbackFunction newFunction);
-  void attachDuringLongPress(callbackFunction newFunction);
-
   // ----- State machine functions -----
 
   // call this function every some milliseconds for handling button events.
@@ -58,22 +50,10 @@ public:
 
 private:
   int _pin;        // hardware pin number. 
-  int _debounceTicks; // number of ticks for debounce times.
-  int _clickTicks; // number of ticks that have to pass by before a click is detected
-  int _pressTicks; // number of ticks that have to pass by before a long button press is detected
-  
   int _buttonReleased;
   int _buttonPressed;
 
   bool _isLongPressed;
-
-  // These variables will hold functions acting as event source.
-  callbackFunction _clickFunc;
-  callbackFunction _doubleClickFunc;
-  callbackFunction _pressFunc;
-  callbackFunction _longPressStartFunc;
-  callbackFunction _longPressStopFunc;
-  callbackFunction _duringLongPressFunc;
 
   // These variables that hold information across the upcoming tick calls.
   // They are initialized once on program start and are updated every time the tick function is called.
