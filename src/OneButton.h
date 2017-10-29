@@ -46,14 +46,12 @@ public:
 
   // call this function every some milliseconds for handling button events.
   void tick(void);
-  bool isLongPressed();
+  inline bool isLongPressed();
 
 private:
   int _pin;        // hardware pin number. 
   int _buttonReleased;
   int _buttonPressed;
-
-  bool _isLongPressed;
 
   // These variables that hold information across the upcoming tick calls.
   // They are initialized once on program start and are updated every time the tick function is called.
