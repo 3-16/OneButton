@@ -40,7 +40,9 @@ public:
   callbackFunction onDuringLongPress;
   
   // ----- Constructor -----
-  OneButton(int pin, int active);
+  // pin - pin number that the button is connected to
+  // inactivePinState - whether pin is HIGH or LOW when button is not pressed
+  OneButton(int pin, int inactivePinState);
   
   // ----- State machine functions -----
 
@@ -49,9 +51,8 @@ public:
   inline bool isLongPressed();
 
 private:
-  int _pin;        // hardware pin number. 
-  int _buttonReleased;
-  int _buttonPressed;
+  int _pin;              // hardware pin number. 
+  int _inactivePinState; // whether pin is HIGH or LOW when button is not pressed
 
   // These variables that hold information across the upcoming tick calls.
   // They are initialized once on program start and are updated every time the tick function is called.
