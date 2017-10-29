@@ -16,9 +16,9 @@ OneButton::OneButton(int pin, int activeLow)
 {
   _pin = pin;
 
-  debounceTicks = 50;      // number of millisec that have to pass by before a click is assumed as safe.
-  clickTicks = 600;        // number of millisec that have to pass by before a click is detected.
-  pressTicks = 1000;       // number of millisec that have to pass by before a long button press is detected.
+  debounceMs = 50;     // number of milliseconds delayed for debounce times
+  clickMs = 600;       // maximum number of milliseconds between double-clicks (and delay before single click confirmed)
+  pressMs = 1000;      // minimum number of milliseconds to count as a long button press
  
   _state = NotPressed; // starting with state NotPressed: waiting for button to be pressed
   _isLongPressed = false;  // Keep track of long press state
@@ -69,7 +69,7 @@ void OneButton::tick(void)
       break;
     case Pressing: // waiting for menu pin being released.
       if (buttonLevel == _buttonReleased) {
-        if((unsigned long)(now - _startTime) < debounceTicks) {
+        if((unsigned long)(now - _startTime) < debounceMs) {
           // button was released too quickly so I assume some debouncing.
           // go back to state NotPressed without calling a function.
           _state = NotPressed;
@@ -79,7 +79,7 @@ void OneButton::tick(void)
           _stopTime = now; // remember stopping time
         }
       }
-	  else if ((buttonLevel == _buttonPressed) && ((unsigned long)(now - _startTime) > pressTicks)) {
+	  else if ((buttonLevel == _buttonPressed) && ((unsigned long)(now - _startTime) > pressMs)) {
         if (onLongPressStart || onDuringLongPress || onLongPressStop) {
           _isLongPressed = true;  // Keep track of long press state
           if (onLongPressStart) onLongPressStart();
@@ -89,20 +89,20 @@ void OneButton::tick(void)
       }
       break;
     case SingleClicked: // waiting for menu pin being pressed the second time or timeout.
-      if (onDoubleClick == NULL || (unsigned long)(now - _startTime) > clickTicks) {
+      if (onDoubleClick == NULL || (unsigned long)(now - _startTime) > clickMs) {
         // this was only a single short click
         if (onClick) onClick();
         _state = NotPressed; // restart.
    
-      } else if ((buttonLevel == _buttonPressed) && ((unsigned long)(now - _stopTime) > debounceTicks)) {
+      } else if ((buttonLevel == _buttonPressed) && ((unsigned long)(now - _stopTime) > debounceMs)) {
         _state = ClickAndPressing; // step to state ClickAndPressing
         _startTime = now; // remember starting time
       }
       break;
     case ClickAndPressing: // waiting for menu pin being released finally.
-      // Stay here for at least debounceTicks because else we might end up in state 1 if the
+      // Stay here for at least debounceMs because else we might end up in state 1 if the
       // button bounces for too long.
-      if (buttonLevel == _buttonReleased && ((unsigned long)(now - _startTime) > debounceTicks)) {
+      if (buttonLevel == _buttonReleased && ((unsigned long)(now - _startTime) > debounceMs)) {
         // this was a 2 click sequence.
         if (onDoubleClick) onDoubleClick();
         _state = NotPressed; // restart.

@@ -28,9 +28,9 @@ extern "C" {
 class OneButton
 {
 public:
-  int debounceTicks; // number of ticks for debounce times.
-  int clickTicks; // number of ticks that have to pass by before a click is detected
-  int pressTicks; // number of ticks that have to pass by before a long button press is detected
+  int debounceMs; // number of milliseconds delayed for debounce times
+  int clickMs;    // maximum number of milliseconds between double-clicks (and delay before single click confirmed)
+  int pressMs;    // minimum number of milliseconds to count as a long button press
   
   // These variables will hold functions acting as event source.
   callbackFunction onClick;
