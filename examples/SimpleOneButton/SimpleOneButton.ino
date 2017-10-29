@@ -19,7 +19,7 @@
 #include "OneButton.h"
 
 // Setup a new OneButton on pin A1.  
-OneButton button(A1, true);
+OneButton button(A1, HIGH);
 
 
 // setup code here, to run once:

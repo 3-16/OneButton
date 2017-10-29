@@ -38,9 +38,9 @@ Button 2 longPress stop
 #include "OneButton.h"
 
 // Setup a new OneButton on pin A1.  
-OneButton button1(A1, true);
+OneButton button1(A1, HIGH);
 // Setup a new OneButton on pin A2.  
-OneButton button2(A2, true);
+OneButton button2(A2, HIGH);
 
 
 // setup code here, to run once:

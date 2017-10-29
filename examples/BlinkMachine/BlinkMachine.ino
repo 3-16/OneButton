@@ -59,7 +59,7 @@ typedef enum {
 MyActions;
 
 // Setup a new OneButton on pin A1.  
-OneButton button(A1, true);
+OneButton button(A1, HIGH);
 
 MyActions nextAction = ACTION_OFF; // no action when starting
 
