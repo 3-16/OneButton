@@ -57,7 +57,16 @@ private:
 
   // These variables that hold information across the upcoming tick calls.
   // They are initialized once on program start and are updated every time the tick function is called.
-  int _state;
+  
+  enum ButtonState {
+    NotPressed = 0,
+    Pressing = 1,
+    SingleClicked = 2,
+    ClickAndPressing = 3,
+    LongPressing = 6
+  };
+  
+  ButtonState _state;
   unsigned long _startTime; // will be set in state 1
   unsigned long _stopTime; // will be set in state 2
 };
