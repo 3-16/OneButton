@@ -25,7 +25,7 @@
 #include "OneButton.h"
 
 // Setup a new OneButton on pin A1.  
-OneButton button(A1, true);
+OneButton button(A1, HIGH);
 
 
 // setup code here, to run once:
@@ -34,7 +34,7 @@ void setup() {
   pinMode(13, OUTPUT);      // sets the digital pin as output
   
   // link the doubleclick function to be called on a doubleclick event.   
-  button.attachDoubleClick(doubleclick);
+  button.onDoubleClick = doubleclick;
 
   // You may have to modify the next 2 lines if using another pin than A1
   PCICR |= (1 << PCIE1);    // This enables Pin Change Interrupt 1 that covers the Analog input pins or Port C.

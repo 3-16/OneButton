@@ -43,10 +43,6 @@ OneButton::OneButton(int pin, int inactivePinState)
   onDuringLongPress = NULL;
 } // OneButton
 
-inline bool OneButton::isLongPressed(){
-  return _state == LongPressing;
-}
-
 void OneButton::tick(void)
 {
   int buttonPressed = digitalRead(_pin) ^ _inactivePinState; // current button state
@@ -100,18 +96,17 @@ void OneButton::tick(void)
       }
       break;
     case LongPressing: // waiting for button to be released after long press
-      if (!buttonPressed) {
+      if (buttonPressed) {
+        if (onDuringLongPress) onDuringLongPress();
+      } else {
         _state = NotPressed;
         if (onLongPressStop) onLongPressStop();
         else if (onClick && onLongPressStart == NULL && onDuringLongPress == NULL) {
           //There were no onLongPress events registered, so treat it as a single click
-		  //Note: We do not catch this earlier in the state machine, in case user is interested in
-		  //checking isLongPressed() even though they are not using onLongPress callbacks.
+          //Note: We do not catch this earlier in the state machine, in case user is interested in
+          //checking isLongPressed() even though they are not using onLongPress callbacks.
           onClick();
         }
-      } else {
-        // button is being long pressed
-        if (onDuringLongPress) onDuringLongPress();
       }
       break;
   }

@@ -47,7 +47,7 @@ public:
   // ----- State machine functions -----
   // call tick() function every some milliseconds for handling button events.
   void tick(void);
-  inline bool isLongPressed();
+  inline bool isLongPressed() { return _state == LongPressing; }
 
 private:
   int _pin;              // hardware pin number. 
