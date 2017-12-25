@@ -75,15 +75,13 @@ void OneButton::tick(void)
       }
       break;
     case SingleClicked: // waiting for second press or timeout
-      if (onDoubleClick && (unsigned long)(now - _startTime) < clickMs) {
-        if (buttonPressed && ((unsigned long)(now - _stopTime) > debounceMs)) {
-          _state = ClickAndPressing;
-          _startTime = now;
-        } else {
-          // this was only a single short click
-          if (onClick) onClick();
-          _state = NotPressed;
-        }
+      if (onDoubleClick == NULL || (unsigned long)(now - _startTime) > clickMs) {
+        // this was only a single short click
+        if (onClick) onClick();
+        _state = NotPressed;
+      } else if (buttonPressed && ((unsigned long)(now - _stopTime) > debounceMs)) {
+        _state = ClickAndPressing;
+        _startTime = now;
       }
       break;
     case ClickAndPressing: // waiting for button to be released (for double click)
