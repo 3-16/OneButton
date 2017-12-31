@@ -19,7 +19,7 @@ OneButton::OneButton(int pin, int inactivePinState)
   
   debounceMs = 50;     // number of milliseconds delayed for debounce times
   clickMs = 600;       // maximum number of milliseconds between double-clicks (and delay before single click confirmed)
-  pressMs = 1000;      // minimum number of milliseconds to count as a long button press
+  longPressMs = 1000;  // minimum number of milliseconds to count as a long button press
  
   _state = NotPressed; // starting with state NotPressed: waiting for button to be pressed
 
@@ -68,7 +68,7 @@ void OneButton::tick(void)
           _stopTime = now;
         }
       }
-      else if (buttonPressed && ((unsigned long)(now - _startTime) > pressMs)) {
+      else if (buttonPressed && ((unsigned long)(now - _startTime) > longPressMs)) {
         _state = LongPressing;
         if (onLongPressStart) onLongPressStart();
         if (onDuringLongPress) onDuringLongPress();

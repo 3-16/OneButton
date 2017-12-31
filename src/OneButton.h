@@ -30,7 +30,7 @@ class OneButton
 public:
   int debounceMs; // number of milliseconds delayed for debounce times
   int clickMs;    // maximum number of milliseconds between double-clicks (and delay before single click confirmed)
-  int pressMs;    // minimum number of milliseconds to count as a long button press
+  int longPressMs;// minimum number of milliseconds to count as a long button press
   
   // Assignable callback functions for each kind of button event
   callbackFunction onClick;
