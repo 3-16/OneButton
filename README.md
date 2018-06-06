@@ -1,7 +1,7 @@
 Arduino OneButton Library
 ===
 
-This fork of [Matthias Hertel's OneButton Library](https://github.com/mathertel/OneButton) is functionally similar, except the code has been refactored to use an Enum and switch statement as a state machine, and many of the trivial class members are made public, thus reducing the library's code size by ~30%. The result for users of the library is that if you previously wrote this:
+[This fork](https://github.com/acropup/OneButton) of [Matthias Hertel's OneButton Library](https://github.com/mathertel/OneButton) is functionally similar, except the code has been refactored to use an Enum and switch statement as a state machine, and many of the trivial class members are made public, thus reducing the library's code size by ~30%. The result for users of the library is that if you previously wrote this:
 ```C
 button.attachDoubleClick(doubleclick);
 ```
